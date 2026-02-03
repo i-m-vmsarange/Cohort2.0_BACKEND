@@ -1,9 +1,9 @@
 const express = require("express");
 const userModel = require("./models/user.model");
 const app = express();
-
+const cors = require("cors");
 app.use(express.json());
-
+app.use(cors());
 //Saving the user
 app.post("/api/users", async (req, res) => {
   const { username, description, occupation } = req.body;
