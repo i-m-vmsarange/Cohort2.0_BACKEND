@@ -2,8 +2,12 @@ const express = require("express");
 const userModel = require("./models/user.model");
 const app = express();
 const cors = require("cors");
+const path = require("path");
+
 app.use(express.json());
 app.use(cors());
+app.use(express.static("./public"));
+
 //Saving the user
 app.post("/api/users", async (req, res) => {
   const { username, description, occupation } = req.body;
@@ -55,4 +59,10 @@ app.patch("/api/users/:id", async (req, res) => {
     user,
   });
 });
+
+// Wild card
+app.use("*name", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
+
 module.exports = app;
