@@ -1,5 +1,4 @@
-import UserCard from "./components/UserCard";
-import axios from "axios";
+import api from "./api";
 import { useEffect } from "react";
 import { useState } from "react";
 const App = () => {
@@ -20,7 +19,7 @@ const App = () => {
   });
 
   function fetchUsers() {
-    axios.get("http://localhost:3000/api/users").then((res) => {
+    api.get("/api/users").then((res) => {
       setUsers(res.data.users);
     });
   }
@@ -47,8 +46,8 @@ const App = () => {
     } else {
       const { username, description, occupation } = e.target.elements;
       // console.log(username.value, description.value, occupation.value);
-      axios
-        .post("http://localhost:3000/api/users", {
+      api
+        .post("/api/users", {
           username: username.value,
           description: description.value,
           occupation: occupation.value,
@@ -66,7 +65,7 @@ const App = () => {
   }
 
   function deleteHandler(noteId) {
-    axios.delete("http://localhost:3000/api/users/" + noteId).then((res) => {
+    api.delete("/api/users/" + noteId).then((res) => {
       console.log(res);
       fetchUsers();
     });
@@ -89,8 +88,8 @@ const App = () => {
   }
 
   async function updateOccupation(editId) {
-    await axios
-      .patch(`http://localhost:3000/api/users/${editId}`, {
+    await api
+      .patch(`/api/users/${editId}`, {
         occupation: formData.occupation,
       })
       .then((res) => {
