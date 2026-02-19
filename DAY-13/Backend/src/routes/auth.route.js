@@ -1,92 +1,9 @@
 const express = require("express");
-const userModel = require("../models/user.model");
 const authRouter = express.Router();
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
+const authController = require("../controllers/auth.controller");
 
-authRouter.post("/register", async (req, res) => {
-  const { username, email, password, bio, profile_image } = req.body;
+authRouter.post("/register", authController.registerController);
 
-  const doesUserExist = await userModel.findOne({
-    $or: [{ username }, { email }],
-  });
-  if (doesUserExist) {
-    return res.status(409).json({
-      message:
-        "User with given " +
-        (doesUserExist.email === email
-          ? "email already exists."
-          : "username already exists."),
-    });
-  }
-
-  const hash = crypto.createHash("sha256").update(password).digest("hex");
-
-  const user = await userModel.create({
-    username,
-    email,
-    password: hash,
-    bio,
-    profile_image,
-  });
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" },
-  );
-  res.cookie("jwt_token", token);
-  res.status(201).json({
-    message: "User registered successfully",
-    user,
-  });
-});
-
-authRouter.post("/login", async (req, res) => {
-  const { email, username, password } = req.body;
-
-  const user = await userModel.findOne({
-    $and: [
-      {
-        username: username,
-      },
-      {
-        email: email,
-      },
-    ],
-  });
-
-  if (!user) {
-    return res.status(400).json({
-      message: "Please check username or email!!!",
-    });
-  }
-
-  const hash = crypto.createHash("sha256").update(password).digest("hex");
-
-  const validPass = hash === user.password;
-
-  if (!validPass) {
-    return res.status(404).json({
-      message: "Invalid password!",
-    });
-  }
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" },
-  );
-  res.cookie("token", token);
-  res.status(200).json({
-    message: "User logged in successfully",
-    user: {
-      username: user.username,
-      email: user.email,
-    },
-  });
-});
+authRouter.post("/login", authController.loginController);
 
 module.exports = authRouter;
