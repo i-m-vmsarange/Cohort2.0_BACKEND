@@ -2,7 +2,7 @@ const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-async function registerController(req, res) {
+async function loginController(req, res) {
   const { email, username, password } = req.body;
 
   const user = await userModel.findOne({
@@ -47,7 +47,7 @@ async function registerController(req, res) {
     },
   });
 }
-async function loginController(req, res) {
+async function registerController(req, res) {
   const { username, email, password, bio, profile_image } = req.body;
 
   const doesUserExist = await userModel.findOne({
