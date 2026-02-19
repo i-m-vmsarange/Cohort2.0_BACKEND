@@ -43,4 +43,50 @@ authRouter.post("/register", async (req, res) => {
   });
 });
 
+authRouter.post("/login", async (req, res) => {
+  const { email, username, password } = req.body;
+
+  const user = await userModel.findOne({
+    $and: [
+      {
+        username: username,
+      },
+      {
+        email: email,
+      },
+    ],
+  });
+
+  if (!user) {
+    return res.status(400).json({
+      message: "Please check username or email!!!",
+    });
+  }
+
+  const hash = crypto.createHash("sha256").update(password).digest("hex");
+
+  const validPass = hash === user.password;
+
+  if (!validPass) {
+    return res.status(404).json({
+      message: "Invalid password!",
+    });
+  }
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" },
+  );
+  res.cookie("token", token);
+  res.status(200).json({
+    message: "User logged in successfully",
+    user: {
+      username: user.username,
+      email: user.email,
+    },
+  });
+});
+
 module.exports = authRouter;
