@@ -2,6 +2,7 @@ const express = require("express");
 const userModel = require("../models/user.model");
 const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 authRouter.post("/register", async (req, res) => {
   const { username, email, password, bio, profile_image } = req.body;
@@ -13,15 +14,18 @@ authRouter.post("/register", async (req, res) => {
     return res.status(409).json({
       message:
         "User with given " +
-        (doesUserExist.email
+        (doesUserExist.email === email
           ? "email already exists."
           : "username already exists."),
     });
   }
+
+  const hash = crypto.createHash("sha256").update(password).digest("hex");
+
   const user = await userModel.create({
     username,
     email,
-    password,
+    password: hash,
     bio,
     profile_image,
   });
@@ -30,6 +34,7 @@ authRouter.post("/register", async (req, res) => {
       id: user._id,
     },
     process.env.JWT_SECRET,
+    { expiresIn: "1d" },
   );
   res.cookie("jwt_token", token);
   res.status(201).json({
