@@ -22,11 +22,9 @@ async function loginController(req, res) {
     });
   }
 
-  const hash = await bcrypt.compare(password, user.password);
+  const isValidPass = await bcrypt.compare(password, user.password);
 
-  const validPass = hash === user.password;
-
-  if (!validPass) {
+  if (!isValidPass) {
     return res.status(404).json({
       message: "Invalid password!",
     });
@@ -63,7 +61,7 @@ async function registerController(req, res) {
     });
   }
 
-  const hash = await bcrypt.hash(password);
+  const hash = await bcrypt.hash(password, 10);
 
   const user = await userModel.create({
     username,
