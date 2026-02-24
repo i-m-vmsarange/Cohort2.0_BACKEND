@@ -10,7 +10,7 @@ const imagekit = new ImageKit({
 async function createPost(req, res) {
   const response = await imagekit.files.upload({
     file: await toFile(Buffer.from(req.file.buffer), "file"),
-    fileName: "Test",
+    fileName: req.file.originalName,
   });
 
   res.status(200).json({
