@@ -13,6 +13,7 @@ async function registerController(req, res) {
       },
     ],
   });
+
   if (doesUserExist) {
     return res.status(409).json({
       message: "User with given email or username already exists!!!",
@@ -32,6 +33,7 @@ async function registerController(req, res) {
       id: user._id,
     },
     process.env.JWT_SECRET,
+    { expiresIn: "1d" },
   );
   res.cookie("token", token);
   res.status(201).json({
@@ -64,14 +66,17 @@ async function loginController(req, res) {
       id: user._id,
     },
     process.env.JWT_SECRET,
+    { expiresIn: "1d" },
   );
+
+  res.cookie("token", token);
+
   res.status(200).json({
     message: "User logged in successfully!!!",
     user: {
       username: user.username,
       email: user.email,
       bio: user.bio,
-      token,
     },
   });
 }
