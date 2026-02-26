@@ -5,5 +5,6 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 postRouter.post("/post", upload.single("imgUrl"), postController.createPost);
+postRouter.get("/get", postController.getPosts);
 
 module.exports = postRouter;

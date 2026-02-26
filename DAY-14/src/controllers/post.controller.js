@@ -43,7 +43,34 @@ async function createPost(req, res) {
     post,
   });
 }
+async function getPosts(req, res) {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(404).json({
+      message: "User not registered!!!",
+    });
+  }
+  let decoded = null;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    return res.status(401).json({
+      message: "Unauthorized access!!",
+    });
+  }
+
+  const posts = await postModel.find({
+    user: decoded.id,
+  });
+
+  res.status(200).json({
+    message: "Posts fetched successfully!!!",
+    posts,
+  });
+}
 
 module.exports = {
   createPost,
+  getPosts,
 };
