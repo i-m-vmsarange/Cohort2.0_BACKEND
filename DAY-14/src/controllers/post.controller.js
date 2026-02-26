@@ -69,8 +69,54 @@ async function getPosts(req, res) {
     posts,
   });
 }
+async function getPostDetails(req, res) {
+  // 1. Check whether it is a registered user or not
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({
+      message: "Unauthorized acess!!!",
+    });
+  }
+
+  // 2. Verify token with our jwt
+  let decoded = null;
+
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return res.status(401).json({
+      message: "Not a valid token",
+    });
+  }
+
+  const userId = decoded.id;
+
+  const postId = req.params.postId;
+
+  const post = await postModel.findById(postId);
+
+  if (!post) {
+    return res.status(404).json({
+      message: "Post with given id not found!!",
+    });
+  }
+  const isValidUser = post.user.toString() === userId;
+  if (!isValidUser) {
+    return res.status(403).json({
+      message: "Forbidden Content!!!",
+    });
+  }
+  res.status(200).json({
+    message: "Post found sucessfully!!!",
+    post: {
+      post,
+    },
+  });
+}
 
 module.exports = {
   createPost,
   getPosts,
+  getPostDetails,
 };
