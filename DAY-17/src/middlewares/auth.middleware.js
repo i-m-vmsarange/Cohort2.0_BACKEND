@@ -5,7 +5,7 @@ async function identifyUser(req, res, next) {
   console.log(token);
   if (!token) {
     return res.status(401).json({
-      message: "Unauthorized access!!!",
+      message: "Unauthorized Acess!!",
     });
   }
 
@@ -13,15 +13,16 @@ async function identifyUser(req, res, next) {
 
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
+  } catch (err) {
     return res.status(401).json({
-      message: "Invalid or expired token!!",
+      message: "Not a registered user!!",
     });
   }
 
   req.user = decoded;
-
   next();
 }
 
-module.exports = identifyUser;
+module.exports = {
+  identifyUser,
+};
