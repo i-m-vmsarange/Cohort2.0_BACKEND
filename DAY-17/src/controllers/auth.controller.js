@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 async function registerUser(req, res) {
   const { username, email, password, bio, profileImg } = req.body;
-
+  console.log(username, email, password);
   const dbUser = await userModel.findOne({
-    $and: [
+    $or: [
       {
         username,
       },
@@ -15,11 +15,13 @@ async function registerUser(req, res) {
       },
     ],
   });
+
   if (dbUser) {
     return res.status(409).json({
       message: "User with given username or email already exists!!!",
     });
   }
+
   const hash = await bcrypt.hash(password, 10);
 
   const user = await userModel.create({
@@ -33,11 +35,12 @@ async function registerUser(req, res) {
   const token = jwt.sign(
     {
       id: user._id,
-      username: dbUser.username,
+      username: user.username,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" },
   );
+
   res.cookie("jwt_token", token);
   res.status(201).json({
     message: "User registered successfully!!!!",
@@ -47,7 +50,7 @@ async function loginUser(req, res) {
   const { username, email, password } = req.body;
 
   const dbUser = await userModel.findOne({
-    $and: [
+    $or: [
       {
         username,
       },

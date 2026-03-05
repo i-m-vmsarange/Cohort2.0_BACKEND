@@ -47,8 +47,6 @@ async function getPostDetails(req, res) {
   const postId = req.params.postId;
   const userId = req.user.id;
 
-  console.log(`userId: ${userId}, postId: ${postId}`);
-
   const post = await postModel.findById(postId);
 
   if (!post) {
