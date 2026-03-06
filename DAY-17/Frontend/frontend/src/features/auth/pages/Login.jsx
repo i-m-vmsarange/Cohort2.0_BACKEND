@@ -3,20 +3,13 @@ import "./form.scss";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   async function loginHandler(e) {
     e.preventDefault();
-
-    await axios
-      .post("http://localhost:3000/api/auth/login", {
-        email,
-        password,
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
   }
   return (
     <main className="form-container">

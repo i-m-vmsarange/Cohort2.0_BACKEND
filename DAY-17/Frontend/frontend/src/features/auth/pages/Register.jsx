@@ -10,15 +10,6 @@ const Register = () => {
 
   async function submitHandler(e) {
     e.preventDefault();
-    await axios
-      .post("http://localhost:3000/api/auth/register", {
-        username,
-        email,
-        password,
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
   }
 
   return (

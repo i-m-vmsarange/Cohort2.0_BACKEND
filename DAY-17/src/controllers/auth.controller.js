@@ -94,8 +94,26 @@ async function loginUser(req, res) {
     },
   });
 }
+async function getMeUser(req, res) {
+  const userId = req.user.id;
 
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(403).json({
+      message: "Not a registered user!!",
+    });
+  }
+
+  return res.status(200).json({
+    message: "Registered user",
+    user: {
+      user,
+    },
+  });
+}
 module.exports = {
   registerUser,
   loginUser,
+  getMeUser,
 };
