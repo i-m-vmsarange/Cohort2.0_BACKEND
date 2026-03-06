@@ -2,6 +2,7 @@ import React from "react";
 import "./form.scss";
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -47,6 +48,9 @@ const Register = () => {
         />
         <button>Submit</button>
       </form>
+      <p>
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </main>
   );
 };
