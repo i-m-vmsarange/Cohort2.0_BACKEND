@@ -10,14 +10,22 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { handleLogin } = useAuth();
+  const { handleLogin, loading } = useAuth();
+
+  const navigate = useNavigate();
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
 
   async function loginHandler(e) {
     e.preventDefault();
 
     const data = await handleLogin(email, password);
 
-    if (!data) {
+    if (data) {
+      console.log(data);
+      navigate("/");
     }
   }
   return (
