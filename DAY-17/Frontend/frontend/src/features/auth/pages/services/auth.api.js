@@ -12,7 +12,7 @@ export async function register(username, email, password) {
       email,
       password,
     });
-
+    console.log(response.data);
     return response.data;
   } catch (err) {
     throw err;
@@ -24,7 +24,7 @@ export async function login(email, password) {
       email,
       password,
     });
-
+    console.log(response);
     return response.data;
   } catch (err) {
     throw err;

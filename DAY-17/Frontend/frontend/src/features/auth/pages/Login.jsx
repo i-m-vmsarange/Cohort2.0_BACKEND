@@ -2,14 +2,23 @@ import React from "react";
 import "./form.scss";
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { handleLogin } = useAuth();
+
   async function loginHandler(e) {
     e.preventDefault();
+
+    const data = await handleLogin(email, password);
+
+    if (!data) {
+    }
   }
   return (
     <main className="form-container">
