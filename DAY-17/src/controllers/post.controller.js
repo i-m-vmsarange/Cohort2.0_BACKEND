@@ -7,6 +7,7 @@ const imagekit = new IMAGEKIT({
 });
 
 async function createPost(req, res) {
+  console.log(req.body, req.file.Buffer);
   const response = await imagekit.files.upload({
     file: await toFile(Buffer.from(req.file.buffer, "file")),
     fileName: req.file.originalname,
@@ -68,8 +69,17 @@ async function getPostDetails(req, res) {
     },
   });
 }
+async function getFeed(req, res) {
+  const posts = await postModel.find().populate("user");
+
+  return res.status(200).json({
+    message: "posts fetched successfully!!!",
+    posts,
+  });
+}
 module.exports = {
   createPost,
   getPosts,
   getPostDetails,
+  getFeed,
 };

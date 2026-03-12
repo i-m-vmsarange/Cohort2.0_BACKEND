@@ -49,16 +49,18 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
   const { username, email, password } = req.body;
 
-  const dbUser = await userModel.findOne({
-    $or: [
-      {
-        username,
-      },
-      {
-        email,
-      },
-    ],
-  });
+  const dbUser = await userModel
+    .findOne({
+      $or: [
+        {
+          username,
+        },
+        {
+          email,
+        },
+      ],
+    })
+    .select("+password");
 
   if (!dbUser) {
     return res.status(404).json({

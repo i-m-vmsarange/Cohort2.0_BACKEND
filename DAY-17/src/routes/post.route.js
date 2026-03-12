@@ -16,4 +16,10 @@ postRouter.post(
 postRouter.get("/getPosts", identifyUser, postController.getPosts);
 // To check whether the given post belong to the signed in user or not
 postRouter.get("/details/:postId", identifyUser, postController.getPostDetails);
+
+/**
+ * @description getFeed API
+ *
+ */
+postRouter.get("/feed", identifyUser, postController.getFeed);
 module.exports = postRouter;
