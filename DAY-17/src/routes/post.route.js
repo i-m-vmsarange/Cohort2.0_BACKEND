@@ -18,7 +18,7 @@ postRouter.get("/getPosts", identifyUser, postController.getPosts);
 postRouter.get("/details/:postId", identifyUser, postController.getPostDetails);
 
 /**
- * @description getFeed API
+ * @description fetches all the posts from the database
  *
  */
 postRouter.get("/feed", identifyUser, postController.getFeed);

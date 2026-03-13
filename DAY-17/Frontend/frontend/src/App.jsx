@@ -4,12 +4,15 @@ import { routes } from "./routes";
 import "./style.scss";
 import "../src/index.css";
 import { AuthProvider } from "./features/auth/auth.context";
+import { PostProvider } from "./features/posts/context/post.context";
 
 const App = () => {
   return (
     <>
       <AuthProvider>
-        <RouterProvider router={routes} />
+        <PostProvider>
+          <RouterProvider router={routes} />
+        </PostProvider>
       </AuthProvider>
     </>
   );
