@@ -17,7 +17,10 @@ const Feed = () => {
   }
   return (
     <main key={""} className="feed w-screen h-screen p-4">
-      <div className="posts flex flex-wrap items-center justify-center gap-5">
+      <h1 className="text-center text-4xl  font-bold tracking-wider">
+        Welcome to Instaclone App
+      </h1>
+      <div className="posts flex flex-wrap items-center justify-center gap-5 mt-4">
         <Post data={{ feed }} />
       </div>
     </main>
