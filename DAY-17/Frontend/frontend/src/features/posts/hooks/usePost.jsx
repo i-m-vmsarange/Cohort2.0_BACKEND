@@ -10,7 +10,8 @@ export const usePost = () => {
     try {
       setLoading(true);
       const data = await getFeed();
-      setFeed(data.posts);
+      setFeed(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {

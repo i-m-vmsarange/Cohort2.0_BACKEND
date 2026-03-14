@@ -5,8 +5,11 @@ import { usePost } from "../hooks/usePost";
 const Feed = () => {
   const { loading, feed, post, handleGetFeed } = usePost();
 
-  useEffect(async () => {
-    handleGetFeed();
+  useEffect(() => {
+    async function getData() {
+      await handleGetFeed();
+    }
+    getData();
   }, []);
 
   if (loading || !feed) {
@@ -14,8 +17,8 @@ const Feed = () => {
   }
   return (
     <main key={""} className="feed w-screen h-screen p-4">
-      <div className="posts flex flex-wrap items-center justify-center">
-        <Post />
+      <div className="posts flex flex-wrap items-center justify-center gap-5">
+        <Post data={{ feed }} />
       </div>
     </main>
   );
