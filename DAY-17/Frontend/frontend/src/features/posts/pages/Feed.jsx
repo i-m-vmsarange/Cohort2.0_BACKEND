@@ -16,7 +16,7 @@ const Feed = () => {
     return <h1>Loading...</h1>;
   }
   return (
-    <main key={""} className="feed w-screen h-screen p-4">
+    <main className="feed w-screen h-screen p-4">
       <h1 className="text-center text-4xl  font-bold tracking-wider">
         Welcome to Instaclone App
       </h1>

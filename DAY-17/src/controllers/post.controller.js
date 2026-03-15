@@ -1,4 +1,5 @@
 const postModel = require("../models/post.model");
+const likeModel = require("../models/likes.model");
 const IMAGEKIT = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 
@@ -69,6 +70,44 @@ async function getPostDetails(req, res) {
     },
   });
 }
+async function likePost(req, res) {
+  const userId = req.user.id;
+  const username = req.user.username;
+  const postId = req.params.postId;
+
+  const isLiked = await likeModel.findOne({
+    likedBy: `${username}`,
+  });
+
+  if (isLiked) {
+    return res.status(409).json({
+      message: `${username} has already liked post with Id ${postId}`,
+    });
+  }
+
+  const like = await likeModel.create({
+    postId,
+    likedBy: username,
+  });
+
+  await updateLikeCount(postId);
+
+  return res.status(201).json({
+    message: `${postId} is liked by ${username}`,
+    like,
+  });
+}
+
+async function updateLikeCount(postId) {
+  const postWithUpdatedLikeCount = await postModel.findByIdAndUpdate(
+    postId,
+
+    { $inc: { likeCount: 1 } },
+    { new: true },
+  );
+  console.log(postWithUpdatedLikeCount);
+}
+
 async function getFeed(req, res) {
   const posts = await postModel.find().populate("user");
 
@@ -82,4 +121,5 @@ module.exports = {
   getPosts,
   getPostDetails,
   getFeed,
+  likePost,
 };

@@ -18,6 +18,18 @@ postRouter.get("/getPosts", identifyUser, postController.getPosts);
 postRouter.get("/details/:postId", identifyUser, postController.getPostDetails);
 
 /**
+ * @route POST /api/like/:postid
+ * @description //like the post using id provided in the request params
+ */
+
+postRouter.post("/like/:postId", identifyUser, postController.likePost);
+
+/**
+ * @route POST /api/updateLikeCount/:postId
+ * @description updates the like count of the post when user likes the post with id mentioned in params
+ */
+
+/**
  * @description fetches all the posts from the database
  *
  */

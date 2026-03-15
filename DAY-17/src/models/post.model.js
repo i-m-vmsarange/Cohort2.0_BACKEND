@@ -14,6 +14,10 @@ const postSchema = new mongoose.Schema({
     ref: "users",
     required: [true, "User id is required!!"],
   },
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const postModel = mongoose.model("posts", postSchema);
