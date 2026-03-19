@@ -35,7 +35,7 @@ async function getPosts(req, res) {
 
   if (!posts) {
     return res.status(404).json({
-      message: "Posts with the given id not found!!!",
+      message: "No posts found for logged in user!!!",
     });
   }
   res.status(200).json({
@@ -77,6 +77,7 @@ async function likePost(req, res) {
 
   const isLiked = await likeModel.findOne({
     likedBy: `${username}`,
+    postId: postId,
   });
 
   if (isLiked) {
@@ -109,7 +110,19 @@ async function updateLikeCount(postId) {
 }
 
 async function getFeed(req, res) {
-  const posts = await postModel.find().populate("user");
+  const user = req.user;
+
+  const posts = await Promise.all(
+    (await postModel.find().populate("user").lean()).map(async (post) => {
+      const isLiked = await likeModel.findOne({
+        likedBy: user.username,
+        postId: post._id,
+      });
+
+      post.isLiked = Boolean(isLiked);
+      return post;
+    }),
+  );
 
   return res.status(200).json({
     message: "posts fetched successfully!!!",

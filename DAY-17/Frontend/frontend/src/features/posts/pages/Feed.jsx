@@ -16,7 +16,7 @@ const Feed = () => {
     return <h1>Loading...</h1>;
   }
   return (
-    <main className="feed w-screen h-screen p-4">
+    <main className="feed w-sreen h-[90vh]">
       <div className="posts flex-col flex-wrap items-center justify-center gap-10 ">
         <Post1 data={{ feed }} />
       </div>

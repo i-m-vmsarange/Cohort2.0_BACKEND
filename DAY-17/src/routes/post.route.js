@@ -12,9 +12,18 @@ postRouter.post(
   identifyUser,
   postController.createPost,
 );
-// To get the post of particular user
+/**
+ * @route GET/api/getPosts
+ * @description fetches the all posts of logged in user
+ */
 postRouter.get("/getPosts", identifyUser, postController.getPosts);
-// To check whether the given post belong to the signed in user or not
+
+/**
+ * @route GET/api/details/:postId
+ * @description fetches the details of post with PostId and checks it belongs
+ * to logged in user or not
+ */
+
 postRouter.get("/details/:postId", identifyUser, postController.getPostDetails);
 
 /**
@@ -30,6 +39,7 @@ postRouter.post("/like/:postId", identifyUser, postController.likePost);
  */
 
 /**
+ * @route GET/api/feed
  * @description fetches all the posts from the database
  *
  */
