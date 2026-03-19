@@ -6,7 +6,6 @@ import {
   Bookmark,
   MoreHorizontal,
 } from "lucide-react";
-import post from "./post";
 
 const InstagramPost = (props) => {
   const { posts } = props.data.feed;

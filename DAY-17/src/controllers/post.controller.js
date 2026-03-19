@@ -119,7 +119,7 @@ async function getFeed(req, res) {
         postId: post._id,
       });
 
-      post.isLiked = Boolean(isLiked);
+      post.isLiked = isLiked;
       return post;
     }),
   );
