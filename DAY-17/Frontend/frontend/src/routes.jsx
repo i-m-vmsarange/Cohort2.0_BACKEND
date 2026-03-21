@@ -4,6 +4,7 @@ import Register from "./features/auth/pages/Register";
 import Home from "./features/auth/pages/Home";
 import Feed from "./features/posts/pages/Feed";
 import CreatePost from "./features/posts/pages/CreatePost";
+
 export const routes = createBrowserRouter([
   { path: "/", element: <Feed /> },
   {
@@ -17,5 +18,9 @@ export const routes = createBrowserRouter([
   {
     path: "/create-post",
     element: <CreatePost />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
 ]);

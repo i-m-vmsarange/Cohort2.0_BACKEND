@@ -20,10 +20,8 @@ const Register = () => {
     console.log(username, email, password);
 
     const data = await handleRegister(username, email, password);
-
-    if (data) {
-      navigate("/");
-    }
+    console.log(data);
+    navigate("/login");
   }
 
   return (

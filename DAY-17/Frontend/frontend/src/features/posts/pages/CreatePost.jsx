@@ -12,8 +12,9 @@ const CreatePost = () => {
     e.preventDefault();
     const file = postImageInputFieldRef.current.files[0];
     const response = await handleCreatePost(file, caption);
-    if (response) {
-      e.target.reset();
+    if (Boolean(response)) {
+      setCaption("");
+      postImageInputFieldRef.current.value = null;
       navigate("/");
     } else {
       console.log("Something went wrong!!!");

@@ -1,4 +1,3 @@
-import React from "react";
 import "./form.scss";
 import { useState } from "react";
 import axios from "axios";
@@ -22,11 +21,7 @@ const Login = () => {
     e.preventDefault();
 
     const data = await handleLogin(email, password);
-
-    if (data) {
-      console.log(data);
-      navigate("/");
-    }
+    navigate("/");
   }
   return (
     <main className="form-container">

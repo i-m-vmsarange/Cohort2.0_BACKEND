@@ -114,8 +114,15 @@ async function getMeUser(req, res) {
     },
   });
 }
+async function logOutUser(req, res) {
+  res.clearCookie("jwt_token");
+  res.status(200).json({
+    message: `You are logged out successfully!!!`,
+  });
+}
 module.exports = {
   registerUser,
   loginUser,
   getMeUser,
+  logOutUser,
 };

@@ -1,5 +1,5 @@
 import { useContext, createContext, useEffect, useState } from "react";
-import { register, login, getUser } from "./pages/services/auth.api";
+import { register, login, getUser, logout } from "./pages/services/auth.api";
 
 export const AuthContext = createContext();
 
@@ -11,7 +11,8 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       const response = await login(email, password);
-      setUser(response.user);
+      console.log(response);
+      setUser(response.data.user);
       return response;
     } catch (err) {
       console.log(err);
@@ -26,6 +27,7 @@ export function AuthProvider({ children }) {
     try {
       const response = await register(username, email, password);
       setUser(response.user);
+      return response;
     } catch (error) {
       console.log(error);
     } finally {
@@ -33,9 +35,37 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const getMe = async () => {
+    setLoading(true);
+    try {
+      const response = await getUser();
+      setUser(response.user);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMe();
+  }, []);
+
+  const handleLogOut = async () => {
+    setLoading(true);
+    try {
+      const response = await logout();
+      setUser(null);
+      return response;
+    } catch (err) {
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <AuthContext.Provider
-      value={{ user, loading, handleLogin, handleRegister }}
+      value={{ loading, handleLogin, handleRegister, user, handleLogOut }}
     >
       {children}
     </AuthContext.Provider>

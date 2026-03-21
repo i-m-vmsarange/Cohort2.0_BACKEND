@@ -1,10 +1,12 @@
-import React from "react";
 import { Link } from "react-router";
 const Home = () => {
   return (
-    <div>
-      <h1 style={{ textAlign: "center", marginTop: "3rem" }}>
-        Welcome to instaclone app!!!!
+    <div className="flex flex-col gap-10">
+      <h1
+        className="text-3xl font-semibold"
+        style={{ textAlign: "center", marginTop: "3rem" }}
+      >
+        Welcome to instaclone App!
       </h1>
       <div
         style={{

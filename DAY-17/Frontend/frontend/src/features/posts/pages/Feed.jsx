@@ -1,6 +1,7 @@
 import { React, useEffect } from "react";
 import Post1 from "../components/Post1";
 import { usePost } from "../hooks/usePost";
+
 import Nav from "../components/Nav";
 
 const Feed = () => {
