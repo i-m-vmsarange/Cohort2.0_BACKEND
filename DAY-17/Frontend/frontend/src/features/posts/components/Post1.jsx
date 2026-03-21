@@ -7,9 +7,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 
-const InstagramPost = (props) => {
-  const { posts } = props.data.feed;
-
+const InstagramPost = ({ feed }) => {
   function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
@@ -32,7 +30,7 @@ const InstagramPost = (props) => {
       return past.toLocaleDateString(); // fallback
     }
   }
-  return posts.map(
+  return feed.map(
     (
       {
         caption,

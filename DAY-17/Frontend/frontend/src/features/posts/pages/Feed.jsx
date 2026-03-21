@@ -8,7 +8,8 @@ const Feed = () => {
 
   useEffect(() => {
     async function getData() {
-      await handleGetFeed();
+      const res = await handleGetFeed();
+      console.log(res);
     }
     getData();
   }, []);
@@ -20,7 +21,7 @@ const Feed = () => {
     <main className="feed ">
       <Nav />
       <div className="posts flex-col flex-wrap items-center justify-center gap-10 ">
-        <Post1 data={{ feed }} />
+        <Post1 feed={feed} />
       </div>
     </main>
   );

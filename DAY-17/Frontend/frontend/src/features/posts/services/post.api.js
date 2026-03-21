@@ -13,3 +13,13 @@ export async function likePost(postId) {
   const response = await api.post("/like/:postId");
   return response.data;
 }
+export async function createPost(imgFile, caption) {
+  const formData = new FormData();
+
+  formData.append("imgUrl", imgFile);
+  formData.append("caption", caption);
+
+  const response = await api.post("/post", formData);
+
+  return response.data;
+}
