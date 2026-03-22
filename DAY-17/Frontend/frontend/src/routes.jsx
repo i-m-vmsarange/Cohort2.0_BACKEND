@@ -6,7 +6,7 @@ import Feed from "./features/posts/pages/Feed";
 import CreatePost from "./features/posts/pages/CreatePost";
 
 export const routes = createBrowserRouter([
-  { path: "/", element: <Feed /> },
+  { path: "/feed", element: <Feed /> },
   {
     path: "/login",
     element: <Login />,
@@ -20,7 +20,7 @@ export const routes = createBrowserRouter([
     element: <CreatePost />,
   },
   {
-    path: "/home",
+    path: "/",
     element: <Home />,
   },
 ]);

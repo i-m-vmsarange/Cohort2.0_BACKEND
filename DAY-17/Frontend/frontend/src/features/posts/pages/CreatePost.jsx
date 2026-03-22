@@ -12,20 +12,22 @@ const CreatePost = () => {
     e.preventDefault();
     const file = postImageInputFieldRef.current.files[0];
     const response = await handleCreatePost(file, caption);
-    if (Boolean(response)) {
-      setCaption("");
-      postImageInputFieldRef.current.value = null;
-      navigate("/");
-    } else {
-      console.log("Something went wrong!!!");
-    }
+    console.log(response);
+    setCaption("");
+    postImageInputFieldRef.current.value = null;
+    navigate("/feed");
   }
 
   return (
     <main className="w-screen h-screen flex items-center justify-center">
       <div className="px-8 pb-8 pt-4 bg-neutral-700  rounded-md flex flex-col gap-3">
         <h1 className="text-2xl  font-semibold">Create New Post</h1>
-        <form onSubmit={handleSubmit} className="max-w-87.5">
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+          className="max-w-87.5"
+        >
           <input
             ref={postImageInputFieldRef}
             className="px-2 py-1 bg-amber-50 text-neutral-500 cursor-pointer"

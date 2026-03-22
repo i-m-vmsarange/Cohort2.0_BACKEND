@@ -5,15 +5,7 @@ import { usePost } from "../hooks/usePost";
 import Nav from "../components/Nav";
 
 const Feed = () => {
-  const { loading, feed, post, handleGetFeed } = usePost();
-
-  useEffect(() => {
-    async function getData() {
-      const res = await handleGetFeed();
-      console.log(res);
-    }
-    getData();
-  }, []);
+  const { loading, feed } = usePost();
 
   if (loading || !feed) {
     return <h1>Loading...</h1>;

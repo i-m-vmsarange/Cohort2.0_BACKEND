@@ -30,6 +30,9 @@ const InstagramPost = ({ feed }) => {
       return past.toLocaleDateString(); // fallback
     }
   }
+  function likeHandler() {
+    console.log("Liked");
+  }
   return feed.map(
     (
       {
@@ -82,7 +85,9 @@ const InstagramPost = ({ feed }) => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-4">
                 <button
-                  // onClick={likeHandler()}
+                  onClick={(e) => {
+                    likeHandler(e);
+                  }}
                   className="hover:text-gray-400 hover:cursor-pointer transition-colors"
                 >
                   <Heart

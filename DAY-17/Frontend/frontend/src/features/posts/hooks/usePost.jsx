@@ -9,8 +9,8 @@ export const usePost = () => {
   const { loading, setLoading, posts, setPosts, feed, setFeed } = context;
 
   const handleGetFeed = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await getFeed();
       console.log(response);
       setFeed(response.posts);
@@ -21,6 +21,10 @@ export const usePost = () => {
       setLoading(false);
     }
   };
+  // To fetch the posts when component loads
+  useEffect(() => {
+    handleGetFeed();
+  }, []);
 
   const handleLike = async (postId) => {
     try {
@@ -33,16 +37,15 @@ export const usePost = () => {
 
   const handleCreatePost = async (imgFile, caption) => {
     setLoading(true);
-    const data = await createPost(imgFile, caption);
-    setFeed([data.post, ...feed]);
-    setLoading(false);
-
-    useEffect(() => {
-      async function getData() {
-        await handleGetFeed();
-      }
-      getData();
-    }, []);
+    try {
+      const data = await createPost(imgFile, caption);
+      setFeed((prev) => [data.post, ...prev]);
+      return data;
+    } catch (err) {
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {

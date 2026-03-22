@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
 
     const data = await handleLogin(email, password);
-    navigate("/");
+    navigate("/feed");
   }
   return (
     <main className="form-container">
