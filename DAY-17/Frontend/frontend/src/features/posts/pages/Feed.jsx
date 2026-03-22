@@ -11,7 +11,7 @@ const Feed = () => {
     return <h1>Loading...</h1>;
   }
   return (
-    <main className="feed ">
+    <main className="feed">
       <Nav />
       <div className="posts flex-col flex-wrap items-center justify-center gap-10 ">
         <Post1 feed={feed} />

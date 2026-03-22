@@ -40,6 +40,7 @@ const Login = () => {
           }}
           type="text"
           placeholder="Enter email"
+          required
         />
         <input
           onChange={(e) => {
@@ -47,11 +48,15 @@ const Login = () => {
           }}
           type="text"
           placeholder="Enter password"
+          required
         />
         <button style={{ backgroundColor: "blue" }}>Login</button>
       </form>
       <p>
-        Don't have an account? <Link to="/register">Register</Link>
+        Don't have an account?{" "}
+        <Link className="text-blue-600" to="/register">
+          Register
+        </Link>
       </p>
     </main>
   );

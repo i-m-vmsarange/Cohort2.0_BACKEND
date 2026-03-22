@@ -41,6 +41,7 @@ const Register = () => {
           }}
           type="text"
           placeholder="Enter email"
+          required
         />
         <input
           onChange={(e) => {
@@ -48,11 +49,15 @@ const Register = () => {
           }}
           type="text"
           placeholder="Enter password"
+          required
         />
         <button>Submit</button>
       </form>
       <p>
-        Already have an account? <Link to="/login">Login</Link>
+        Already have an account?{" "}
+        <Link className="text-green-600" to="/login">
+          Login
+        </Link>
       </p>
     </main>
   );
