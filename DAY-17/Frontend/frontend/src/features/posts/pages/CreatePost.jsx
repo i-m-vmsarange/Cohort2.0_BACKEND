@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { usePost } from "../hooks/usePost";
 
 const CreatePost = () => {
@@ -20,7 +20,7 @@ const CreatePost = () => {
 
   return (
     <main className="w-screen h-screen flex items-center justify-center">
-      <div className="px-8 pb-8 pt-4 bg-neutral-700  rounded-md flex flex-col gap-3">
+      <div className="px-8 pb-8 pt-4 bg-neutral-700  rounded-md flex flex-col gap-4">
         <h1 className="text-2xl  font-semibold">Create New Post</h1>
         <form
           onSubmit={(e) => {
@@ -34,6 +34,7 @@ const CreatePost = () => {
             type="file"
             name="imgUrl"
             id="file"
+            required
           />
           <input
             value={caption}
@@ -45,8 +46,22 @@ const CreatePost = () => {
             placeholder="Enter caption"
             name="caption"
             id="caption"
+            required
           />
-          <button style={{ backgroundColor: "#ff3328" }}>Create</button>
+          <div className="flex items-center justify-center gap-5 mt-3">
+            <button
+              type="submit"
+              style={{ backgroundColor: "#ff3328", width: "110px" }}
+            >
+              Create
+            </button>
+            <Link
+              className="px-3 py-2 bg-green-700 rounded-md font-semibold"
+              to={"/feed"}
+            >
+              Go to feed
+            </Link>
+          </div>
         </form>
       </div>
     </main>
