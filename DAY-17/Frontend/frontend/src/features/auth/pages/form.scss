@@ -7,6 +7,8 @@ main {
   h1 {
     text-align: center;
     margin: 1rem 0;
+    font-size: 28px;
+    font-weight: 500;
   }
   form {
     width: 80%;
@@ -17,7 +19,11 @@ main {
     margin-inline: auto;
     justify-content: center;
 
-    input,
+    input{
+        padding: 0.5rem 1rem;
+      border-radius: 10px;
+      border: 1px solid grey;
+    }
     button {
       padding: 0.5rem 1rem;
       border-radius: 10px;

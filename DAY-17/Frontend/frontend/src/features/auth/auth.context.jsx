@@ -1,4 +1,4 @@
-import { useContext, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { register, login, getUser, logout } from "./pages/services/auth.api";
 
 export const AuthContext = createContext();
@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     try {
       const response = await login(email, password);
       console.log(response);
-      setUser(response.data.user);
+      setUser(response.user);
       return response;
     } catch (err) {
       console.log(err);
@@ -63,6 +63,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   };
+
   return (
     <AuthContext.Provider
       value={{ loading, handleLogin, handleRegister, user, handleLogOut }}

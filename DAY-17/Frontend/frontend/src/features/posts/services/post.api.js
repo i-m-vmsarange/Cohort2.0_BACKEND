@@ -10,7 +10,7 @@ export async function getFeed() {
   return response.data;
 }
 export async function likePost(postId) {
-  const response = await api.post("/like/:postId");
+  const response = await api.post(`/like/${postId}`);
   return response.data;
 }
 export async function createPost(imgFile, caption) {
@@ -21,5 +21,9 @@ export async function createPost(imgFile, caption) {
 
   const response = await api.post("/post", formData);
 
+  return response.data;
+}
+export async function disLikePost(postId) {
+  const response = await api.post(`/dislike/${postId}`);
   return response.data;
 }

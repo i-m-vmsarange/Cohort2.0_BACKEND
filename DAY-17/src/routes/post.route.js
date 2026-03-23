@@ -34,6 +34,12 @@ postRouter.get("/details/:postId", identifyUser, postController.getPostDetails);
 postRouter.post("/like/:postId", identifyUser, postController.likePost);
 
 /**
+ * @route dislike post with the given id
+ * @description POST/API dislike the post with given id and decrement like count
+ */
+postRouter.post("/dislike/:postId", identifyUser, postController.dislikePost);
+
+/**
  * @route POST /api/updateLikeCount/:postId
  * @description updates the like count of the post when user likes the post with id mentioned in params
  */

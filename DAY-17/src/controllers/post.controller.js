@@ -2,6 +2,8 @@ const postModel = require("../models/post.model");
 const likeModel = require("../models/likes.model");
 const IMAGEKIT = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
+const { json } = require("express");
+const { default: mongoose } = require("mongoose");
 
 const imagekit = new IMAGEKIT({
   privateKey: process.env["IMAGEKIT_PRIVATE_KEY"],
@@ -91,37 +93,83 @@ async function likePost(req, res) {
     likedBy: username,
   });
 
-  await updateLikeCount(postId);
+  const response = await updateLikeCount(postId);
 
   return res.status(201).json({
     message: `${postId} is liked by ${username}`,
-    like,
+    response,
   });
 }
+async function dislikePost(req, res) {
+  const postId = req.params.postId;
+  const userId = req.user.id;
+  const username = req.user.username;
 
+  const isLiked = await likeModel.findOne({
+    $and: [
+      {
+        likedBy: username,
+      },
+      {
+        postId,
+      },
+    ],
+  });
+  console.log(isLiked);
+  if (!isLiked) {
+    return res.status(400).json({
+      message: "User  has not liked the post...",
+    });
+  }
+
+  const deleteLikeId = await likeModel.findByIdAndDelete({
+    _id: isLiked._id,
+  });
+
+  if (!deleteLikeId) {
+    return res.status(404).json({
+      message: "Like Id not found",
+    });
+  }
+
+  const response = await decrementLikeCount(postId);
+  res.status(200).json({
+    message: "Post disliked successfully",
+    response,
+  });
+}
 async function updateLikeCount(postId) {
   const postWithUpdatedLikeCount = await postModel.findByIdAndUpdate(
     postId,
-
     { $inc: { likeCount: 1 } },
     { new: true },
   );
-  console.log(postWithUpdatedLikeCount);
+  return postWithUpdatedLikeCount;
+}
+async function decrementLikeCount(postId) {
+  const updatedPost = await postModel.findByIdAndUpdate(
+    postId,
+    { $inc: { likeCount: -1 } },
+    { new: true },
+  );
+  return updatedPost;
 }
 
 async function getFeed(req, res) {
   const user = req.user;
 
   const posts = await Promise.all(
-    (await postModel.find().populate("user").lean()).map(async (post) => {
-      const isLiked = await likeModel.findOne({
-        likedBy: user.username,
-        postId: post._id,
-      });
+    (await postModel.find().sort({ _id: -1 }).populate("user").lean()).map(
+      async (post) => {
+        const isLiked = await likeModel.findOne({
+          likedBy: user.username,
+          postId: post._id,
+        });
 
-      post.isLiked = isLiked;
-      return post;
-    }),
+        post.isLiked = isLiked;
+        return post;
+      },
+    ),
   );
 
   return res.status(200).json({
@@ -129,10 +177,12 @@ async function getFeed(req, res) {
     posts,
   });
 }
+
 module.exports = {
   createPost,
   getPosts,
   getPostDetails,
   getFeed,
   likePost,
+  dislikePost,
 };

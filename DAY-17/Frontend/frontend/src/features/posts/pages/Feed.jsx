@@ -5,7 +5,7 @@ import { usePost } from "../hooks/usePost";
 import Nav from "../components/Nav";
 
 const Feed = () => {
-  const { loading, feed } = usePost();
+  const { loading, feed, handleToggleLike } = usePost();
 
   if (loading || !feed) {
     return <h1>Loading...</h1>;
@@ -14,7 +14,7 @@ const Feed = () => {
     <main className="feed">
       <Nav />
       <div className="posts flex-col flex-wrap items-center justify-center gap-10 ">
-        <Post1 feed={feed} />
+        <Post1 feed={feed} handleToggleLike={handleToggleLike} />
       </div>
     </main>
   );
