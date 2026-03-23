@@ -32,9 +32,7 @@ const InstagramPost = ({ feed, handleToggleLike }) => {
 
   const likeHandler = async (post) => {
     console.log("Liked");
-
     const res = await handleToggleLike(post);
-
     console.log(res);
   };
 

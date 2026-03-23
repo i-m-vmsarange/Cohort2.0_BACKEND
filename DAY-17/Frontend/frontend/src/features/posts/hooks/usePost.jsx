@@ -30,6 +30,24 @@ export const usePost = () => {
   }, []);
 
   const handleToggleLike = async (post) => {
+    let previousPosts;
+
+    setFeed((prevPosts) => {
+      previousPosts = prevPosts;
+      return prevPosts.map((prevPost) => {
+        if (prevPost._id === post._id) {
+          return {
+            ...prevPost,
+            isLiked: !prevPost.isLiked,
+            likeCount: prevPost.isLiked
+              ? prevPost.likeCount - 1
+              : prevPost.likeCount + 1,
+          };
+        }
+        return prevPost;
+      });
+    });
+
     try {
       let res;
       if (post.isLiked) {
@@ -37,10 +55,10 @@ export const usePost = () => {
       } else {
         res = await likePost(post._id);
       }
-      setFeed((prev) => prev.map((p) => (p._id === post._id ? res.post : p)));
       return res;
     } catch (error) {
-      console.log(error);
+      setFeed(previousPosts);
+      console.log("Liked failed!!", error);
     }
   };
 
