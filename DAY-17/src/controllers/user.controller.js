@@ -9,6 +9,16 @@ async function followUser(req, res) {
       message: "You cannot follow yourself!!!",
     });
   }
+  const doesFollowRecordExist = await followModel.findOne({
+    follower: followerUsername,
+    following: followeeUsername,
+  });
+
+  if (doesFollowRecordExist) {
+    return res.status(400).json({
+      message: `${followerUsername} already follows ${followeeUsername}`,
+    });
+  }
 
   const followRecord = await followModel.create({
     follower: followerUsername,
