@@ -1,12 +1,17 @@
-import {
-  Heart,
-  MessageCircle,
-  Send,
-  Bookmark,
-  MoreHorizontal,
-} from "lucide-react";
+import { useState } from "react";
+import { Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 
 const InstagramPost = ({ feed, handleToggleLike }) => {
+  const [follow, setFollow] = useState(false);
+
+  function handleFollow(e) {
+    console.log(e.target._id);
+    if (!follow) {
+      setFollow(true);
+    } else {
+      setFollow(false);
+    }
+  }
   function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
@@ -57,8 +62,13 @@ const InstagramPost = ({ feed, handleToggleLike }) => {
               <p className="text-xs text-gray-400">{"Boston"}</p>
             </div>
           </div>
-          <button className="p-1 hover:bg-gray-900 rounded-full transition-colors">
-            <MoreHorizontal size={20} className="text-gray-300" />
+          <button
+            onClick={(post) => {
+              handleFollow(post);
+            }}
+            className="px-3 py-2 border font-semibold mr-2 border-amber-50 hover:bg-gray-900 rounded-md cursor-pointer transition-colors"
+          >
+            {follow ? "Following" : "Follow"}
           </button>
         </div>
 

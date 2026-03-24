@@ -6,11 +6,14 @@ import {
   likePost,
   disLikePost,
 } from "../services/post.api";
+import { AuthContext } from "../../auth/auth.context";
 
 export const usePost = () => {
   const context = useContext(PostContext);
+  const userContext = useContext(AuthContext);
 
   const { loading, setLoading, posts, setPosts, feed, setFeed } = context;
+  const { user } = userContext;
 
   const handleGetFeed = async () => {
     setLoading(true);
@@ -30,12 +33,17 @@ export const usePost = () => {
   }, []);
 
   const handleToggleLike = async (post) => {
+    // Storing the previous posts
     let previousPosts;
 
     setFeed((prevPosts) => {
+      // saving previous posts in the temp variable
       previousPosts = prevPosts;
+      // mapping over the previous posts to match the id of post on which user clicked
       return prevPosts.map((prevPost) => {
+        // comparing the previous post id and current post id i.e does post exist or not
         if (prevPost._id === post._id) {
+          // Updating the post in the current posts by updating the matched post object i.e updating the UI first
           return {
             ...prevPost,
             isLiked: !prevPost.isLiked,
@@ -75,6 +83,8 @@ export const usePost = () => {
     }
   };
 
+  const handleToggleFollow = async (post) => {};
+
   return {
     loading,
     feed,
@@ -83,5 +93,6 @@ export const usePost = () => {
     handleGetFeed,
     handleToggleLike,
     handleCreatePost,
+    handleToggleFollow,
   };
 };
