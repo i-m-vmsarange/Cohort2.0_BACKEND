@@ -1,5 +1,6 @@
 const postModel = require("../models/post.model");
 const likeModel = require("../models/likes.model");
+const followModel = require("../models/follow.model");
 const IMAGEKIT = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 const { json } = require("express");
@@ -166,7 +167,12 @@ async function getFeed(req, res) {
           postId: post._id,
         });
 
-        post.isLiked = isLiked;
+        const isFollowing = await followModel.findOne({
+          follower: req.user.username,
+          following: post.user.username,
+        });
+        post.isFollowed = !!isFollowing;
+        post.isLiked = !!isLiked;
         return post;
       },
     ),

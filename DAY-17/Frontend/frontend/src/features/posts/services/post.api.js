@@ -27,7 +27,11 @@ export async function disLikePost(postId) {
   const response = await api.post(`/dislike/${postId}`);
   return response.data;
 }
-export async function followUser(username) {
-  const res = await api.post(`/follow/${username}`);
+export async function followUser(followeeUsername) {
+  const res = await api.post(`/follow/${followeeUsername}`);
+  return res.data;
+}
+export async function unFollowUser(followeeUsername) {
+  const res = await api.delete(`/unfollow/${followeeUsername}`);
   return res.data;
 }

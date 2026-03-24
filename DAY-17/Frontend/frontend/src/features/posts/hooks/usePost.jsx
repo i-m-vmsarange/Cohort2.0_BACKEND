@@ -5,6 +5,8 @@ import {
   getFeed,
   likePost,
   disLikePost,
+  followUser,
+  unFollowUser,
 } from "../services/post.api";
 import { AuthContext } from "../../auth/auth.context";
 
@@ -13,7 +15,6 @@ export const usePost = () => {
   const userContext = useContext(AuthContext);
 
   const { loading, setLoading, posts, setPosts, feed, setFeed } = context;
-  const { user } = userContext;
 
   const handleGetFeed = async () => {
     setLoading(true);
@@ -83,7 +84,35 @@ export const usePost = () => {
     }
   };
 
-  const handleToggleFollow = async (post) => {};
+  const handleToggleFollow = async (post) => {
+    let previousPosts;
+
+    setFeed((feedPosts) => {
+      previousPosts = feedPosts;
+      return feedPosts.map((feedPost) => {
+        if (feedPost._id === post._id) {
+          return {
+            ...feedPost,
+            isFollowed: !feedPost.isFollowed,
+          };
+        }
+        return feedPost;
+      });
+    });
+
+    try {
+      let res;
+      if (!post.isFollowed) {
+        res = await followUser(post.user.username);
+      } else {
+        res = await unFollowUser(post.user.username);
+      }
+      return res;
+    } catch (error) {
+      setFeed(previousPosts);
+      console.log(error);
+    }
+  };
 
   return {
     loading,

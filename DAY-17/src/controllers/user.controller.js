@@ -32,7 +32,32 @@ async function followUser(req, res) {
     },
   });
 }
+async function unFollowUser(req, res) {
+  const followerUsername = req.user.username;
+  const followeeUsername = req.params.username;
+
+  const doesRecordExist = await followModel.findOne({
+    follower: followerUsername,
+    following: followeeUsername,
+  });
+
+  if (!doesRecordExist) {
+    res.status(400).json({
+      message: `No follow record exist with the username ${followeeUsername}`,
+    });
+  }
+
+  const removeFollowRecord = await followModel.findByIdAndDelete(
+    doesRecordExist._id,
+  );
+
+  return res.status(200).json({
+    message: `${followerUsername} unfollowed ${followeeUsername} successfully...`,
+    followRecord: removeFollowRecord,
+  });
+}
 
 module.exports = {
   followUser,
+  unFollowUser,
 };
