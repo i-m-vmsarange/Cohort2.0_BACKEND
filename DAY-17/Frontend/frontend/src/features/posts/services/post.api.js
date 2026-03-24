@@ -35,3 +35,7 @@ export async function unFollowUser(followeeUsername) {
   const res = await api.delete(`/unfollow/${followeeUsername}`);
   return res.data;
 }
+export async function savePost(postId) {
+  const res = api.post(`/save/${postId}`);
+  return res.data;
+}

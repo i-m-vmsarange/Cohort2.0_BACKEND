@@ -114,6 +114,8 @@ export const usePost = () => {
     }
   };
 
+  const handleToggleSave = async (post) => {};
+
   return {
     loading,
     feed,

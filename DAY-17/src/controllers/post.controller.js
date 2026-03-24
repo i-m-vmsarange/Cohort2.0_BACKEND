@@ -5,6 +5,7 @@ const IMAGEKIT = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 const { json } = require("express");
 const { default: mongoose } = require("mongoose");
+const { saveModel } = require("../models/saved.model");
 
 const imagekit = new IMAGEKIT({
   privateKey: process.env["IMAGEKIT_PRIVATE_KEY"],
@@ -147,6 +148,7 @@ async function updateLikeCount(postId) {
   );
   return postWithUpdatedLikeCount;
 }
+
 async function decrementLikeCount(postId) {
   const updatedPost = await postModel.findByIdAndUpdate(
     postId,
@@ -154,6 +156,35 @@ async function decrementLikeCount(postId) {
     { new: true },
   );
   return updatedPost;
+}
+
+async function savePost(req, res) {
+  const postId = req.params.postId;
+  const userId = req.user.id;
+
+  console.log(postId);
+  console.log(userId);
+
+  const doesPostExist = await saveModel.findOne({
+    postId,
+    userId,
+  });
+
+  if (doesPostExist) {
+    res.status(409).json({
+      message: `Post with give id ${postId} is already saved by ${req.user.username}`,
+    });
+  }
+
+  const savedPost = await saveModel.create({
+    postId,
+    userId,
+  });
+
+  res.status(200).json({
+    message: `Post with give id ${postId} is saved successfully`,
+    post: savedPost,
+  });
 }
 
 async function getFeed(req, res) {
@@ -171,6 +202,13 @@ async function getFeed(req, res) {
           follower: req.user.username,
           following: post.user.username,
         });
+
+        const isSaved = await saveModel.findOne({
+          postId: post._id,
+          userId: post.user._id,
+        });
+
+        post.isSaved = !!isSaved;
         post.isFollowed = !!isFollowing;
         post.isLiked = !!isLiked;
         return post;
@@ -191,4 +229,5 @@ module.exports = {
   getFeed,
   likePost,
   dislikePost,
+  savePost,
 };

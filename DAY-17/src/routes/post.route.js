@@ -50,4 +50,10 @@ postRouter.post("/dislike/:postId", identifyUser, postController.dislikePost);
  *
  */
 postRouter.get("/feed", identifyUser, postController.getFeed);
+
+/**
+ * @route POST api/post/save
+ * @description saves the post with the help of postId given in params
+ */
+postRouter.post("/save/:postId", identifyUser, postController.savePost);
 module.exports = postRouter;
