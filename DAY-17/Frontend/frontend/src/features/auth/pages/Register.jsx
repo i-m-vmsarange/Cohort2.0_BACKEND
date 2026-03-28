@@ -1,5 +1,5 @@
 import "./form.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
@@ -8,6 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [filename, setFileName] = useState("upload profile pic");
+  const profilePicInputRef = useRef();
 
   const { handleRegister, loading } = useAuth();
   const navigate = useNavigate();
@@ -22,9 +23,18 @@ const Register = () => {
   }
   async function submitHandler(e) {
     e.preventDefault();
-    const data = await handleRegister(username, email, password);
+    const profileImg = profilePicInputRef.current.files[0];
+    const data = await handleRegister(username, email, password, profileImg);
     console.log(data);
-    navigate("/login");
+    if (data) {
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setFileName("upload profile pic");
+      navigate("/login");
+    } else {
+      console.log("Could not register user :(, Something went wrong!!");
+    }
   }
 
   return (
@@ -58,6 +68,7 @@ const Register = () => {
           {filename}
         </label>
         <input
+          ref={profilePicInputRef}
           onChange={() => {
             addFileName();
           }}

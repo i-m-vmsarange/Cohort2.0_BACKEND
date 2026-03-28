@@ -5,13 +5,16 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export async function register(username, email, password) {
+export async function register(username, email, password, profileImg) {
+  const formData = new FormData();
+
+  formData.append("username", username);
+  formData.append("email", email);
+  formData.append("password", password);
+  formData.append("profileImg", profileImg);
+
   try {
-    const response = await api.post("/register", {
-      username,
-      email,
-      password,
-    });
+    const response = await api.post("/register", formData);
     console.log(response.data);
     return response.data;
   } catch (err) {

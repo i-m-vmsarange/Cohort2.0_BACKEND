@@ -1,9 +1,22 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const IMAGEKIT = require("@imagekit/nodejs");
+const { toFile } = require("@imagekit/nodejs");
+
+const imageKit = new IMAGEKIT({
+  privateKey: process.env["IMAGEKIT_PRIVATE_KEY"],
+});
 
 async function registerUser(req, res) {
-  const { username, email, password, bio, profileImg } = req.body;
+  console.log(req.body, req.file.Buffer);
+  const response = await imageKit.files.upload({
+    file: await toFile(Buffer.from(req.file.buffer, "file")),
+    fileName: req.file.originalname,
+    folder: "profile-pics",
+  });
+  console.log(response);
+  const { username, email, password, bio } = req.body;
   console.log(username, email, password);
   const dbUser = await userModel.findOne({
     $or: [
@@ -29,7 +42,7 @@ async function registerUser(req, res) {
     email,
     password: hash,
     bio,
-    profileImg,
+    profileImg: response.url,
   });
 
   const token = jwt.sign(
