@@ -7,6 +7,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [filename, setFileName] = useState("upload profile pic");
 
   const { handleRegister, loading } = useAuth();
   const navigate = useNavigate();
@@ -14,11 +15,13 @@ const Register = () => {
   if (loading) {
     return <h1>Loading...</h1>;
   }
-
+  function addFileName() {
+    const fileInput = document.getElementById("fileInput");
+    const selectedFileName = fileInput.files[0].name;
+    setFileName(selectedFileName);
+  }
   async function submitHandler(e) {
     e.preventDefault();
-    console.log(username, email, password);
-
     const data = await handleRegister(username, email, password);
     console.log(data);
     navigate("/login");
@@ -50,6 +53,18 @@ const Register = () => {
           type="text"
           placeholder="Enter password"
           required
+        />
+        <label htmlFor="fileInput" className="cursor-pointer">
+          {filename}
+        </label>
+        <input
+          onChange={() => {
+            addFileName();
+          }}
+          hidden
+          type="file"
+          name=""
+          id="fileInput"
         />
         <button>Submit</button>
       </form>

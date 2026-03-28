@@ -19,8 +19,9 @@ main {
     margin-inline: auto;
     justify-content: center;
 
-    input{
-        padding: 0.5rem 1rem;
+    input,
+    label {
+      padding: 0.5rem 1rem;
       border-radius: 10px;
       border: 1px solid grey;
     }

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 
 const InstagramPost = ({
