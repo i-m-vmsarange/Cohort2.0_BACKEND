@@ -1,4 +1,6 @@
 import { Heart, MessageCircle, Send, Bookmark } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../../auth/auth.context";
 
 const InstagramPost = ({
   feed,
@@ -6,6 +8,8 @@ const InstagramPost = ({
   handleToggleFollow,
   handleToggleSave,
 }) => {
+  const userContext = useContext(AuthContext);
+  const { user, setUser } = userContext;
   function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
@@ -63,14 +67,16 @@ const InstagramPost = ({
               <p className="text-xs text-gray-400">{"Boston"}</p>
             </div>
           </div>
-          <button
-            onClick={() => {
-              handleFollow(post);
-            }}
-            className="px-3 py-2 border font-semibold mr-2 border-amber-50 hover:bg-gray-900 rounded-md cursor-pointer transition-colors"
-          >
-            {post.isFollowed ? "Following" : "Follow"}
-          </button>
+          {post?.user?.username !== user?.username && (
+            <button
+              onClick={() => {
+                handleFollow(post);
+              }}
+              className="px-3 py-2 border font-semibold mr-2 border-amber-50 hover:bg-gray-900 rounded-md cursor-pointer transition-colors"
+            >
+              {post.isFollowed ? "Following" : "Follow"}
+            </button>
+          )}
         </div>
 
         {/* Main Image */}

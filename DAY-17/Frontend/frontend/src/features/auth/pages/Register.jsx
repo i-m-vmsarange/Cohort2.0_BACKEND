@@ -84,6 +84,7 @@ const Register = () => {
           {filename}
         </label>
         <input
+          required
           ref={profilePicInputRef}
           onChange={() => {
             addFileName();

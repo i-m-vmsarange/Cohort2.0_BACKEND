@@ -14,7 +14,6 @@ import { AuthContext } from "../../auth/auth.context";
 
 export const usePost = () => {
   const context = useContext(PostContext);
-  const userContext = useContext(AuthContext);
 
   const { loading, setLoading, posts, setPosts, feed, setFeed } = context;
 

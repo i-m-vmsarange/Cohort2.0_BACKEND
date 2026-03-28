@@ -222,18 +222,27 @@ async function getFeed(req, res) {
     (await postModel.find().sort({ _id: -1 }).populate("user").lean()).map(
       async (post) => {
         const isLiked = await likeModel.findOne({
-          likedBy: user.username,
-          postId: post._id,
+          $and: [
+            { likedBy: user.username },
+            {
+              postId: post._id,
+            },
+          ],
         });
 
         const isFollowing = await followModel.findOne({
-          follower: req.user.username,
-          following: post.user.username,
+          $and: [
+            {
+              follower: req.user.username,
+            },
+            {
+              following: post.user.username,
+            },
+          ],
         });
 
         const isSaved = await saveModel.findOne({
-          post: post._id,
-          user: post.user._id,
+          $and: [{ post: post._id }, { user: user.id }],
         });
 
         post.isSaved = !!isSaved;
