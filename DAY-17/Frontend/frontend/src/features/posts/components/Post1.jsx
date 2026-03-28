@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark } from "lucide-react";
 
-const InstagramPost = ({ feed, handleToggleLike, handleToggleFollow }) => {
+const InstagramPost = ({
+  feed,
+  handleToggleLike,
+  handleToggleFollow,
+  handleToggleSave,
+}) => {
   function timeAgo(dateString) {
     const now = new Date();
     const past = new Date(dateString);
@@ -24,7 +29,7 @@ const InstagramPost = ({ feed, handleToggleLike, handleToggleFollow }) => {
       return past.toLocaleDateString(); // fallback
     }
   }
-
+  console.log(feed);
   const likeHandler = async (post) => {
     console.log("Liked");
     const res = await handleToggleLike(post);
@@ -32,6 +37,10 @@ const InstagramPost = ({ feed, handleToggleLike, handleToggleFollow }) => {
   };
   const handleFollow = async (post) => {
     const res = await handleToggleFollow(post);
+    console.log(res);
+  };
+  const handleSavePost = async (post) => {
+    const res = await handleToggleSave(post);
     console.log(res);
   };
   return feed.map((post) => {
@@ -97,8 +106,17 @@ const InstagramPost = ({ feed, handleToggleLike, handleToggleFollow }) => {
                 <Send size={26} />
               </button>
             </div>
-            <button className="hover:text-gray-400 hover:cursor-pointer transition-colors">
-              <Bookmark size={26} />
+            <button
+              onClick={() => {
+                handleSavePost(post);
+              }}
+              className="hover:text-gray-400 hover:cursor-pointer transition-colors"
+            >
+              <Bookmark
+                size={26}
+                fill={post.isSaved ? "white" : "none"}
+                stroke={post.isSaved ? "white" : "currentColor"}
+              />
             </button>
           </div>
 

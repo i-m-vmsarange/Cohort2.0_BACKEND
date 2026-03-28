@@ -39,3 +39,6 @@ export async function savePost(postId) {
   const res = api.post(`/save/${postId}`);
   return res.data;
 }
+export async function unsavePost(postId) {
+  const res = await api.delete(`/unsave/${postId}`);
+}

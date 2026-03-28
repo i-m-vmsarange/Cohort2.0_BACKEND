@@ -3,7 +3,6 @@ const likeModel = require("../models/likes.model");
 const followModel = require("../models/follow.model");
 const IMAGEKIT = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
-const { json } = require("express");
 const { default: mongoose } = require("mongoose");
 const { saveModel } = require("../models/saved.model");
 
@@ -166,24 +165,53 @@ async function savePost(req, res) {
   console.log(userId);
 
   const doesPostExist = await saveModel.findOne({
-    postId,
-    userId,
+    post: postId,
+    user: userId,
   });
 
   if (doesPostExist) {
-    res.status(409).json({
+    res.status(400).json({
       message: `Post with give id ${postId} is already saved by ${req.user.username}`,
     });
   }
 
   const savedPost = await saveModel.create({
-    postId,
-    userId,
+    post: postId,
+    user: userId,
   });
 
   res.status(200).json({
-    message: `Post with give id ${postId} is saved successfully`,
+    message: `Post with given id ${postId} is saved successfully`,
     post: savedPost,
+  });
+}
+async function unsavePost(req, res) {
+  const postId = req.params.postId;
+  const userId = req.user.id;
+
+  const doesSaveRecordExist = await saveModel.findOne({
+    post: postId,
+    user: userId,
+  });
+
+  if (!doesSaveRecordExist) {
+    return res.status(400).json({
+      message: "Save post record does not exist!!!",
+    });
+  }
+
+  const deleteSaveRecord = await saveModel.findByIdAndDelete(
+    doesSaveRecordExist._id,
+  );
+
+  if (!deleteSaveRecord) {
+    res.status(409).json({
+      message: "Something went wrong in deleting the save record!!!",
+    });
+  }
+
+  res.status(200).json({
+    message: `Post ${postId} deleted successfully!!`,
   });
 }
 
@@ -204,8 +232,8 @@ async function getFeed(req, res) {
         });
 
         const isSaved = await saveModel.findOne({
-          postId: post._id,
-          userId: post.user._id,
+          post: post._id,
+          user: post.user._id,
         });
 
         post.isSaved = !!isSaved;
@@ -230,4 +258,5 @@ module.exports = {
   likePost,
   dislikePost,
   savePost,
+  unsavePost,
 };

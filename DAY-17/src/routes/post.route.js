@@ -52,8 +52,14 @@ postRouter.post("/dislike/:postId", identifyUser, postController.dislikePost);
 postRouter.get("/feed", identifyUser, postController.getFeed);
 
 /**
- * @route POST api/post/save
+ * @route POST api/save/:postId
  * @description saves the post with the help of postId given in params
  */
 postRouter.post("/save/:postId", identifyUser, postController.savePost);
+
+/**
+ * @route DELETE api/unsave/:postId
+ * @description deletes the entry of saved post from the save model i.e unsaves the post saved by the user
+ */
+postRouter.delete("/unsave/:postId", identifyUser, postController.unsavePost);
 module.exports = postRouter;

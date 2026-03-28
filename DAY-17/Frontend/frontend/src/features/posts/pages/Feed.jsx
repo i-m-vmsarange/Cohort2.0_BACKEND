@@ -5,7 +5,13 @@ import { usePost } from "../hooks/usePost";
 import Nav from "../components/Nav";
 
 const Feed = () => {
-  const { loading, feed, handleToggleLike, handleToggleFollow } = usePost();
+  const {
+    loading,
+    feed,
+    handleToggleLike,
+    handleToggleFollow,
+    handleToggleSave,
+  } = usePost();
 
   if (loading || !feed) {
     return <h1>Loading...</h1>;
@@ -18,6 +24,7 @@ const Feed = () => {
           feed={feed}
           handleToggleLike={handleToggleLike}
           handleToggleFollow={handleToggleFollow}
+          handleToggleSave={handleToggleSave}
         />
       </div>
     </main>

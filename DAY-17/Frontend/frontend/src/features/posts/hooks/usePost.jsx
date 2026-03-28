@@ -7,6 +7,8 @@ import {
   disLikePost,
   followUser,
   unFollowUser,
+  savePost,
+  unsavePost,
 } from "../services/post.api";
 import { AuthContext } from "../../auth/auth.context";
 
@@ -114,7 +116,36 @@ export const usePost = () => {
     }
   };
 
-  const handleToggleSave = async (post) => {};
+  const handleToggleSave = async (post) => {
+    let previousPosts;
+    // Here we are just handling UI conditions before calling an API
+    setFeed((feedPosts) => {
+      previousPosts = feedPosts;
+
+      return feedPosts.map((feedPost) => {
+        if (feedPost._id === post._id) {
+          return {
+            ...feedPost,
+            isSaved: !feedPost.isSaved,
+          };
+        }
+        return feedPost;
+      });
+    });
+
+    try {
+      let res;
+      if (!post.isSaved) {
+        res = await savePost(post._id);
+      } else {
+        res = await unsavePost(post._id);
+      }
+      return res;
+    } catch (error) {
+      setFeed(previousPosts);
+      console.log(error);
+    }
+  };
 
   return {
     loading,
@@ -125,5 +156,6 @@ export const usePost = () => {
     handleToggleLike,
     handleCreatePost,
     handleToggleFollow,
+    handleToggleSave,
   };
 };
