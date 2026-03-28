@@ -21,11 +21,17 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const handleRegister = async (username, email, password, profileImg) => {
+  const handleRegister = async (username, email, password, bio, profileImg) => {
     setLoading(true);
 
     try {
-      const response = await register(username, email, password, profileImg);
+      const response = await register(
+        username,
+        email,
+        password,
+        bio,
+        profileImg,
+      );
       setUser(response.user);
       return response;
     } catch (error) {

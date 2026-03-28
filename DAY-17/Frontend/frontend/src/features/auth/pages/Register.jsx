@@ -7,6 +7,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [bio, setBio] = useState("");
   const [filename, setFileName] = useState("upload profile pic");
   const profilePicInputRef = useRef();
 
@@ -24,13 +25,20 @@ const Register = () => {
   async function submitHandler(e) {
     e.preventDefault();
     const profileImg = profilePicInputRef.current.files[0];
-    const data = await handleRegister(username, email, password, profileImg);
+    const data = await handleRegister(
+      username,
+      email,
+      password,
+      bio,
+      profileImg,
+    );
     console.log(data);
     if (data) {
       setUsername("");
       setEmail("");
       setPassword("");
       setFileName("upload profile pic");
+      setBio("");
       navigate("/login");
     } else {
       console.log("Could not register user :(, Something went wrong!!");
@@ -62,6 +70,14 @@ const Register = () => {
           }}
           type="text"
           placeholder="Enter password"
+          required
+        />
+        <input
+          onChange={(e) => {
+            setBio(e.target.value);
+          }}
+          type="text"
+          placeholder="Enter bio"
           required
         />
         <label htmlFor="fileInput" className="cursor-pointer">
