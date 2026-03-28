@@ -11,7 +11,6 @@ const imagekit = new IMAGEKIT({
 });
 
 async function createPost(req, res) {
-  console.log(req.body, req.file.Buffer);
   const response = await imagekit.files.upload({
     file: await toFile(Buffer.from(req.file.buffer, "file")),
     fileName: req.file.originalname,

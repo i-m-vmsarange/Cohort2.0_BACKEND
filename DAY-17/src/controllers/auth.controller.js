@@ -9,15 +9,14 @@ const imageKit = new IMAGEKIT({
 });
 
 async function registerUser(req, res) {
-  console.log(req.body, req.file.Buffer);
   const response = await imageKit.files.upload({
     file: await toFile(Buffer.from(req.file.buffer, "file")),
     fileName: req.file.originalname,
     folder: "profile-pics",
   });
-  console.log(response);
+
   const { username, email, password, bio } = req.body;
-  console.log(username, email, password);
+
   const dbUser = await userModel.findOne({
     $or: [
       {
