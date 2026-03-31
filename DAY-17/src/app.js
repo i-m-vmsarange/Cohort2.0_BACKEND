@@ -7,6 +7,8 @@ const userRouter = require("./routes/user.route");
 const cors = require("cors");
 const path = require("path");
 
+console.log(path);
+
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(
@@ -21,7 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/api", postRouter);
 app.use("/api", userRouter);
 
-app.get("*", (req, res) => {
+app.get("*name", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 
