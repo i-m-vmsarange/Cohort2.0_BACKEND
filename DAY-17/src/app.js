@@ -19,8 +19,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api", postRouter);
 app.use("/api", userRouter);
-app.use("*name", (req, res) => {
-  res.send("You have entered wrong URL!!!");
-});
+// app.use("*name", (req, res) => {
+//   res.send("You have entered wrong URL!!!");
+// });
 
 module.exports = app;
