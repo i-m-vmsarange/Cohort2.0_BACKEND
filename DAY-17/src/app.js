@@ -6,6 +6,8 @@ const postRouter = require("./routes/post.route");
 const userRouter = require("./routes/user.route");
 const cors = require("cors");
 
+app.use(express.static("./public"));
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -17,5 +19,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api", postRouter);
 app.use("/api", userRouter);
+app.use("*name", (req, res) => {
+  res.send("You have entered wrong URL!!!");
+});
 
 module.exports = app;
