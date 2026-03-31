@@ -21,7 +21,14 @@ const Login = () => {
     e.preventDefault();
 
     const data = await handleLogin(email, password);
-    navigate("/feed");
+    if (data) {
+      console.log(data);
+      setEmail("");
+      setPassword("");
+      navigate("/feed");
+    } else {
+      console.log("Could not login user :(, Something went wrong!!");
+    }
   }
   return (
     <main className="form-container">
