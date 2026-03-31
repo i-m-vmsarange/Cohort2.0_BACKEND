@@ -5,8 +5,9 @@ const authRouter = require("./routes/auth.route");
 const postRouter = require("./routes/post.route");
 const userRouter = require("./routes/user.route");
 const cors = require("cors");
+const path = require("path");
 
-app.use(express.static("./public"));
+app.use(express.static(path.join(__dirname, "../public/index.html")));
 
 app.use(
   cors({
@@ -19,8 +20,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api", postRouter);
 app.use("/api", userRouter);
-// app.use("*name", (req, res) => {
-//   res.send("You have entered wrong URL!!!");
-// });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 module.exports = app;
