@@ -28,7 +28,7 @@ export async function registerUser(req,res,next){
         })
 
         if(dbUser){
-            return res.status(400).json({
+            return res.status(409).json({
                 success: false,
                  message: "User already exists!!",
             })
