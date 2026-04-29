@@ -1,6 +1,7 @@
 import USER from "../models/user.model.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import sendEmail from "../service/mail.service.js";
 export async function registerUser(req,res,next){
 
     let { username, email, password } = req.body;
@@ -43,8 +44,17 @@ export async function registerUser(req,res,next){
         email,
         password: hashedPassword
       });
-      await user.save();
+  
 
+    const reponse = await sendEmail({
+        to: `${user.email}`,
+        subject: "Welcome to Perplexity!!",
+        html: `<h1>Welcome to Perplexity, ${user.username}!!</h1><p>Thank you for registering with us. We're excited to have you on board!</p>
+        <br/><p>Best regards,<br/>The Perplexity Team</p>`,
+      })
+    console.log("Email response: \n"+reponse);
+
+    await user.save();
       // Remove sensitive fields before sending user data
       const userResponse = {
         _id: user._id,
