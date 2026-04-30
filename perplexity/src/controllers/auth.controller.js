@@ -2,6 +2,8 @@ import USER from "../models/user.model.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendEmail from "../service/mail.service.js";
+
+
 export async function registerUser(req,res,next){
 
     let { username, email, password } = req.body;
@@ -44,17 +46,21 @@ export async function registerUser(req,res,next){
         email,
         password: hashedPassword
       });
-  
+      await user.save();
 
-    const reponse = await sendEmail({
+      const verifyEmailToken = jwt.sign({
+        email: user.email
+      },process.env.JWT_SECRET_KEY,{expiresIn: "1d"});
+
+    const response = await sendEmail({
         to: `${user.email}`,
         subject: "Welcome to Perplexity!!",
         html: `<h1>Welcome to Perplexity, ${user.username}!!</h1><p>Thank you for registering with us. We're excited to have you on board!</p>
-        <br/><p>Best regards,<br/>The Perplexity Team</p>`,
+        <br/><p>Please click on following link to verify your email:</p><br/><a href="http://localhost:3000/api/auth/verify-email?emailToken=${verifyEmailToken}">Verify Email</a><br/><p>Best regards,<br/>The Perplexity Team</p>`,
       })
-    console.log("Email response: \n"+reponse);
+    console.log(response);
 
-    await user.save();
+    
       // Remove sensitive fields before sending user data
       const userResponse = {
         _id: user._id,
@@ -81,8 +87,39 @@ export async function registerUser(req,res,next){
         user: userResponse
       });
     }catch(error){
-        console.error("Error in registerUser:", error);
-        error.status = 500;
+        error.status = error.status || 500;
         next(error);
     }
+}
+
+export async function verifyEmail(req,res,next){
+      
+     try{
+      const {emailToken} = req.query;
+
+     const decoded = jwt.verify(emailToken,process.env.JWT_SECRET_KEY);
+
+     const user = await USER.findOne({email: decoded.email});
+
+      if(!user){
+        res.status(400).json({
+          message: "Invalid token!!",
+          success: false
+        })
+      }
+
+      user.verified = true;
+
+      user.save();
+
+      const html = `
+         <h1>Email verified successfully!!!</h1>
+         <p>Please go to <a href="#">Login Page</a></p>
+      `
+         res.status(200).send(html);
+     }
+     catch(error){
+      error.status = error.status || 500;
+      next(error)
+     }
 }
