@@ -91,12 +91,66 @@ export async function registerUser(req,res,next){
         next(error);
     }
 }
+export async function loginUser(req,res,next){
+     
+   try{
+     let {identifier,password} = req.body;
 
+    if(typeof identifier === "string") identifier = identifier.trim();
+    if(typeof password === "string") password = password.trim();
+
+    if(!identifier || !password){
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required!!"
+      })
+    }
+
+    const dbUser = await USER.findOne({
+      $or:[
+        {username: identifier},
+        {
+          email: identifier
+        }
+      ]
+    });
+
+    if(!dbUser){
+      return res.status(409).json({
+        success: false,
+        message: "Invalid credentials!!"
+      })
+    }
+
+    const isValidPass = await bcrypt.compare(password,dbUser.password);
+
+    if(!isValidPass){
+      return res.status(409).json({
+        success: false,
+        message: "Invalid credentials!!"
+      })
+    }
+
+   return res.status(200).json({
+    success: true,
+    message: "User logged in successfully!!",
+    user: {
+      username: dbUser.username,
+      email: dbUser.email
+    }
+   })
+   }
+   catch(error){
+    error.status = error.status || 500;
+      next(error);
+   }
+
+}
 export async function verifyEmail(req,res,next){
       
      try{
       const {emailToken} = req.query;
-
+      
      const decoded = jwt.verify(emailToken,process.env.JWT_SECRET_KEY);
 
      const user = await USER.findOne({email: decoded.email});
