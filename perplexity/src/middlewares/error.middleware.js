@@ -3,12 +3,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default function handleError(error,req,res,next){
+    
     const response = {
         message: error.message
     }
-    if(process.env.NODE_ENVIRONMENT==="development"){
 
+    if(process.env.NODE_ENVIRONMENT==="development"){
         response.stack = error.stack;
     }
+
    return res.status(error.status).json(response);
 }

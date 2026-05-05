@@ -131,6 +131,13 @@ export async function loginUser(req,res,next){
       })
     }
 
+    const token = jwt.sign({
+      id: dbUser._id,
+      username: dbUser.username
+    },process.env.JWT_SECRET_KEY,{expiresIn: "1d"});
+
+    res.cookie("jwt_token",token);
+
    return res.status(200).json({
     success: true,
     message: "User logged in successfully!!",
@@ -176,4 +183,32 @@ export async function verifyEmail(req,res,next){
       error.status = error.status || 500;
       next(error)
      }
+}
+export async function getUser(req,res,next){
+       try{
+              const user = req.user;
+              
+             const dbUser = await USER.findById(user.id);
+
+             if(!dbUser){
+              return res.status(404).json({
+                success: false,
+                message: "User not found!!"
+              })
+             }
+
+             res.status(200).json({
+              success: true,
+              message: "Current logged in user!!",
+              user: {
+                id: dbUser._id,
+                username: dbUser.username,
+                email: dbUser.email
+              }
+             })
+       }
+       catch(error){
+        error.status = error.status || 500;
+        next(error);
+       }
 }

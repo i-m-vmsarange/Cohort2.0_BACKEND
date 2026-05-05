@@ -1,6 +1,7 @@
 import express from "express";
 const authRouter = express.Router();
-import { registerUser,loginUser,verifyEmail } from "../controllers/auth.controller.js";
+import authUser from "../middlewares/auth.middleware.js";
+import { registerUser,loginUser,verifyEmail,getUser } from "../controllers/auth.controller.js";
 import {registerValidation,loginValidation} from "../validation/auth.validator.js";
 
 /**
@@ -28,5 +29,17 @@ authRouter.post("/login",loginValidation,loginUser);
  * @returns
  */
 authRouter.get("/verify-email",verifyEmail);
+
+/**
+ * @route GET /api/auth/get-me
+ * @desc To get current logged in user
+ * @access Public
+ * @returns Current logged in user
+ */
+authRouter.get("/get-me",authUser,getUser);
+
+
+
+
 
 export default authRouter;
