@@ -7,6 +7,8 @@ import sendEmail from "../service/mail.service.js";
 export async function registerUser(req,res,next){
 
     let { username, email, password } = req.body;
+
+
     if (typeof username === "string") username = username.trim();
     if (typeof email === "string") email = email.trim();
     if (typeof password === "string") password = password.trim();
@@ -113,7 +115,7 @@ export async function loginUser(req,res,next){
           email: identifier
         }
       ]
-    });
+    }).select("+password");
 
     if(!dbUser){
       return res.status(409).json({
@@ -131,6 +133,14 @@ export async function loginUser(req,res,next){
       })
     }
 
+    if(!dbUser.verified){
+      return res.status(401).json({
+        success: false,
+        message: "User is not verified, please verify first to login!!!"
+      })
+    }
+
+
     const token = jwt.sign({
       id: dbUser._id,
       username: dbUser.username
@@ -142,8 +152,10 @@ export async function loginUser(req,res,next){
     success: true,
     message: "User logged in successfully!!",
     user: {
+      _id: dbUser._id,
       username: dbUser.username,
-      email: dbUser.email
+      email: dbUser.email,
+      verified : dbUser.verified
     }
    })
    }
@@ -200,11 +212,7 @@ export async function getUser(req,res,next){
              res.status(200).json({
               success: true,
               message: "Current logged in user!!",
-              user: {
-                id: dbUser._id,
-                username: dbUser.username,
-                email: dbUser.email
-              }
+              user: dbUser
              })
        }
        catch(error){
